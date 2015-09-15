@@ -42,21 +42,25 @@ colnames(fullData) <- c("subject", "activity",features[,2])
 #mean_and_std_features <- grep("(mean|std)\\(\\)", features[, 2])
 #meanStdIndices <- grep("mean\\(\\)|std\\(\\)", features[, 2])
 Extractedfeatures <- grep(".*mean().*|.*std().*", colnames(fullData))
-ExtractedData <- fullData[, c(fullData$subject,fullData$activity, Extractedfeatures)]
+ExtractedData <- fullData[, Extractedfeatures]
 
 #If we want to do some more chages in the column names like we want to write Mean and Std rather than writing mean and std
 # on the other way we want to dele () sign form the column names
 names(ExtractedData) <- gsub('-mean', 'Mean', names(ExtractedData))
 names(ExtractedData) <- gsub('-std', 'Std', names(ExtractedData))
 names(ExtractedData) <- gsub('[()-]', '', names(ExtractedData))
-#View(ExtractedData)
+a <- names(ExtractedData)
 
 #Answer for STEP 3
 
 activity_labels <- read.table("D:/getdata-projectfiles-UCI HAR Dataset/UCI HAR Dataset/activity_labels.txt")
+
+ExtractedData <- cbind(fullData$subject,fullData$activity, ExtractedData)
+
+names(ExtractedData) <- c("subject", "activity", a)
 ExtractedData$activity <- factor(ExtractedData$activity, levels = activity_labels[,1], labels = activity_labels[,2])
 
-#fullData$activity <- activity_labels[fullData[, 2], 2]
+ExtractedData$subject <- as.factor(ExtractedData$subject)
 
 #STEP 4 is is already over in the previous stpes only
 
@@ -66,7 +70,7 @@ ExtractedData$activity <- factor(ExtractedData$activity, levels = activity_label
 
 
 
-ddply(.data=ExtractedData, .variables=c("subject","activity"))
+#ddply(.data=ExtractedData, .variables=c("subject","activity"))
 #a <- ddply(fullData, .(subject, activity), )
 
 
